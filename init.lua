@@ -1,3 +1,7 @@
+require("config.remap")
+require("config.extra")
+require("config.set")
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -374,9 +378,9 @@ require('lazy').setup({
       -- end, { desc = '[S]earch [/] in Open Files' })
 
       -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set('n', '<leader>sn', function()
+      vim.keymap.set('n', '<leader>pn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
+      end, { desc = '[P]roject [N]eovim' })
     end,
   },
 
@@ -1011,11 +1015,11 @@ require('lazy').setup({
         require('dapui').eval(nil, { enter = true })
       end)
 
-      vim.keymap.set('n', '<F1>', dap.continue)
-      vim.keymap.set('n', '<F2>', dap.step_into)
-      vim.keymap.set('n', '<F3>', dap.step_over)
-      vim.keymap.set('n', '<F4>', dap.step_out)
-      vim.keymap.set('n', '<F5>', dap.step_back)
+      vim.keymap.set('n', '<F1>', dap.step_back, { desc = "step_back" })
+      vim.keymap.set('n', '<F2>', dap.step_into, { desc = "step_into" })
+      vim.keymap.set('n', '<F3>', dap.step_over, { desc = "step_over" })
+      vim.keymap.set('n', '<F4>', dap.step_out, { desc = "step_out" })
+      vim.keymap.set('n', '<F5>', dap.continue)
       vim.keymap.set('n', '<F12>', dap.restart)
 
       for _, language in ipairs({ "typescript", "javascript", "svelte" }) do
@@ -1035,14 +1039,18 @@ require('lazy').setup({
             name = "Attach debugger to existing `node --inspect` process",
             -- for compiled languages like TypeScript or Svelte.js
             sourceMaps = true,
+            -- for docker (references project root inside docker)
+            localRoot = "${workspaceFolder}",
+            remoteRoot = '/app',
             -- resolve source maps in nested locations while ignoring node_modules
             resolveSourceMapLocations = {
               "${workspaceFolder}/**",
-              "!**/node_modules/**" },
-              -- path to src in vite based projects (and most other projects as well)
-              cwd = "${workspaceFolder}/src",
-              -- we don't want to debug code inside node_modules, so skip it!
-              skipFiles = { "${workspaceFolder}/node_modules/**/*.js" },
+              "!**/node_modules/**"
+            },
+            -- path to src in vite based projects (and most other projects as well)
+            cwd = "${workspaceFolder}",
+            -- we don't want to debug code inside node_modules, so skip it!
+            -- skipFiles = { "${workspaceFolder}/node_modules/**/*.js" },
             },
             {
               type = "pwa-chrome",
@@ -1054,7 +1062,7 @@ require('lazy').setup({
               port = 9229,
               webRoot = "${workspaceFolder}/src",
               -- skip files from vite's hmr
-              skipFiles = { "**/node_modules/**/*", "**/@vite/*", "**/src/client/*", "**/src/*" },
+              -- skipFiles = { "**/node_modules/**/*", "**/@vite/*", "**/src/client/*", "**/src/*" },
             },
             -- only if language is javascript, offer this debug action
             language == "javascript" and {
@@ -1085,6 +1093,27 @@ require('lazy').setup({
       end
     end,
   },
+
+  -- for show!
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {
+      cursor_color = "#ff8800",
+      stiffness = 0.8,
+      trailing_stiffness = 0.6,
+      trailing_exponent = 1,
+      never_draw_over_target = true,
+      hide_target_hack = true,
+      gamma = 1,
+    }
+  },
+
+  {
+    "tpope/vim-dadbod",
+    "kristijanhusak/vim-dadbod-ui",
+    "kristijanhusak/vim-dadbod-completion"
+  },
+
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
