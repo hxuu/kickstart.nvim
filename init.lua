@@ -103,10 +103,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -126,16 +126,16 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
--- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.hl.on_yank()`
-vim.api.nvim_create_autocmd('TextYankPost', {
-  desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function()
-    vim.hl.on_yank()
-  end,
-})
+-- -- Highlight when yanking (copying) text
+-- --  Try it with `yap` in normal mode
+-- --  See `:help vim.hl.on_yank()`
+-- vim.api.nvim_create_autocmd('TextYankPost', {
+--   desc = 'Highlight when yanking (copying) text',
+--   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+--   callback = function()
+--     vim.hl.on_yank()
+--   end,
+-- })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -215,66 +215,6 @@ require('lazy').setup({
   --
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
-
-  -- { -- Useful plugin to show you pending keybinds.
-  --   'folke/which-key.nvim',
-  --   event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-  --   opts = {
-  --     -- delay between pressing a key and opening which-key (milliseconds)
-  --     -- this setting is independent of vim.o.timeoutlen
-  --     delay = 0,
-  --     icons = {
-  --       -- set icon mappings to true if you have a Nerd Font
-  --       mappings = vim.g.have_nerd_font,
-  --       -- If you are using a Nerd Font: set icons.keys to an empty table which will use the
-  --       -- default which-key.nvim defined Nerd Font icons, otherwise define a string table
-  --       keys = vim.g.have_nerd_font and {} or {
-  --         Up = '<Up> ',
-  --         Down = '<Down> ',
-  --         Left = '<Left> ',
-  --         Right = '<Right> ',
-  --         C = '<C-…> ',
-  --         M = '<M-…> ',
-  --         D = '<D-…> ',
-  --         S = '<S-…> ',
-  --         CR = '<CR> ',
-  --         Esc = '<Esc> ',
-  --         ScrollWheelDown = '<ScrollWheelDown> ',
-  --         ScrollWheelUp = '<ScrollWheelUp> ',
-  --         NL = '<NL> ',
-  --         BS = '<BS> ',
-  --         Space = '<Space> ',
-  --         Tab = '<Tab> ',
-  --         F1 = '<F1>',
-  --         F2 = '<F2>',
-  --         F3 = '<F3>',
-  --         F4 = '<F4>',
-  --         F5 = '<F5>',
-  --         F6 = '<F6>',
-  --         F7 = '<F7>',
-  --         F8 = '<F8>',
-  --         F9 = '<F9>',
-  --         F10 = '<F10>',
-  --         F11 = '<F11>',
-  --         F12 = '<F12>',
-  --       },
-  --     },
-  --
-  --     -- Document existing key chains
-  --     spec = {
-  --       { '<leader>s', group = '[S]earch' },
-  --       { '<leader>t', group = '[T]oggle' },
-  --       { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-  --     },
-  --   },
-  -- },
-
-  -- NOTE: Plugins can specify dependencies.
-  --
-  -- The dependencies are proper plugin specifications as well - anything
-  -- you do for a plugin at the top level, you can do for a dependency.
-  --
-  -- Use the `dependencies` key to specify the dependencies of a particular plugin
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
@@ -1040,8 +980,8 @@ require('lazy').setup({
             -- for compiled languages like TypeScript or Svelte.js
             sourceMaps = true,
             -- for docker (references project root inside docker)
-            localRoot = "${workspaceFolder}",
-            remoteRoot = '/app',
+            localRoot = "${workspaceFolder}/challenge/src",
+            remoteRoot = '/usr/app',
             -- resolve source maps in nested locations while ignoring node_modules
             resolveSourceMapLocations = {
               "${workspaceFolder}/**",
@@ -1114,6 +1054,138 @@ require('lazy').setup({
     "kristijanhusak/vim-dadbod-completion"
   },
 
+  {
+    "HakonHarnes/img-clip.nvim",
+    event = "VeryLazy",
+    opts = {
+
+      default = {
+        -- file and directory options
+        -- dir_path = "/home/hxuu/blog/static/images", ---@type string
+        dir_path = "images", ---@type string
+        extension = "png", ---@type string
+        file_name = "%Y-%m-%d-%H-%M-%S", ---@type string
+        use_absolute_path = false, ---@type boolean
+        relative_to_current_file = false, ---@type boolean
+
+        -- template options
+        template = "$FILE_PATH", ---@type string
+        url_encode_path = false, ---@type boolean
+        relative_template_path = true, ---@type boolean
+        use_cursor_in_template = true, ---@type boolean
+        insert_mode_after_paste = true, ---@type boolean
+
+        -- prompt options
+        prompt_for_file_name = false, ---@type boolean
+        show_dir_path_in_prompt = false, ---@type boolean
+
+        -- base64 options
+        max_base64_size = 10, ---@type number
+        embed_image_as_base64 = false, ---@type boolean
+
+        -- image options
+        process_cmd = "", ---@type string
+        copy_images = false, ---@type boolean
+        download_images = true, ---@type boolean
+
+        -- drag and drop options
+        drag_and_drop = {
+          enabled = true, ---@type boolean
+          insert_mode = false, ---@type boolean
+        },
+      },
+
+      -- filetype specific options
+      filetypes = {
+        markdown = {
+          url_encode_path = true, ---@type boolean
+          template = "![$CURSOR]($FILE_PATH)", ---@type string
+          download_images = false, ---@type boolean
+        },
+
+        vimwiki = {
+          url_encode_path = true, ---@type boolean
+          template = "![$CURSOR]($FILE_PATH)", ---@type string
+          download_images = false, ---@type boolean
+        },
+
+        html = {
+          template = '<img src="$FILE_PATH" alt="$CURSOR">', ---@type string
+        },
+
+        asciidoc = {
+          template = 'image::$FILE_PATH[width=80%, alt="$CURSOR"]', ---@type string
+        },
+      },
+
+      -- file, directory, and custom triggered options
+      files = {}, ---@type table
+      dirs = {}, ---@type table
+      custom = {}, ---@type table
+
+    },
+    keys = {
+      -- suggested keymap
+      { "<leader>pp", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+    },
+  },
+
+  {
+    "tpope/vim-fugitive",
+    config = function()
+      vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
+
+      local hxuu_Fugitive = vim.api.nvim_create_augroup("hxuu_Fugitive", {})
+
+      local autocmd = vim.api.nvim_create_autocmd
+      autocmd("BufWinEnter", {
+        group = hxuu_Fugitive,
+        pattern = "*",
+        callback = function()
+          if vim.bo.ft ~= "fugitive" then
+            return
+          end
+
+          local bufnr = vim.api.nvim_get_current_buf()
+          local opts = {buffer = bufnr, remap = false}
+          vim.keymap.set("n", "<leader>p", function()
+            vim.cmd.Git('push')
+          end, opts)
+
+          -- rebase always
+          vim.keymap.set("n", "<leader>P", function()
+            vim.cmd.Git({'pull',  '--rebase'})
+          end, opts)
+
+          -- NOTE: It allows me to easily set the branch i am pushing and any tracking
+          -- needed if i did not set the branch up correctly
+          vim.keymap.set("n", "<leader>t", ":Git push -u origin ", opts);
+        end,
+      })
+
+
+      vim.keymap.set("n", "gu", "<cmd>diffget //2<CR>")
+      vim.keymap.set("n", "gh", "<cmd>diffget //3<CR>")
+    end
+  },
+
+  {
+    "mbbill/undotree",
+
+    config = function()
+      vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+    end
+  },
+
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    build = "cd app && yarn install",
+    init = function()
+      vim.g.mkdp_filetypes = { "markdown" }
+    end,
+    ft = { "markdown" },
+  },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the

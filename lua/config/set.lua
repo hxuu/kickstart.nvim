@@ -36,3 +36,10 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.opt_local.wrap = false
     end,
 })
+
+vim.g.mkdp_browser = '/usr/bin/brave'
+vim.g.mkdp_browserfunc = "OpenBrave"
+
+function OpenBrave(url)
+  vim.fn.jobstart({"brave-browser", url}, {detach = true})
+end
