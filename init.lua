@@ -923,6 +923,7 @@ require('lazy').setup({
       'nvim-telescope/telescope-dap.nvim',
       'nvim-neotest/nvim-nio',
       "mxsdev/nvim-dap-vscode-js",
+      "mfussenegger/nvim-dap-python",
       -- Make sure vscode-js-debug is installed
     },
     config = function()
@@ -934,6 +935,7 @@ require('lazy').setup({
         debugger_cmd = { "/usr/lib/node_modules/vscode-js-debug/src/dapDebugServer.js" },
         adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' },
       })
+
       require("dap").adapters["pwa-node"] = {
         type = "server",
         host = "localhost",
@@ -944,6 +946,33 @@ require('lazy').setup({
           args = {"/usr/lib/node_modules/vscode-js-debug/src/dapDebugServer.js", "${port}"},
         }
       }
+
+      dap.adapters.python = function(cb, config)
+        if config.request == 'attach' then
+          ---@diagnostic disable-next-line: undefined-field
+          local port = (config.connect or config).port
+          ---@diagnostic disable-next-line: undefined-field
+          local host = (config.connect or config).host or '127.0.0.1'
+          cb({
+            type = 'server',
+            port = assert(port, '`connect.port` is required for a python `attach` configuration'),
+            host = host,
+            options = {
+              source_filetype = 'python',
+            },
+          })
+        else
+          cb({
+            type = 'executable',
+            command = 'python',
+            args = { '-m', 'debugpy.adapter' },
+            options = {
+              source_filetype = 'python',
+            },
+          })
+        end
+      end
+
       require('dapui').setup()
       require('nvim-dap-virtual-text').setup {}
 
